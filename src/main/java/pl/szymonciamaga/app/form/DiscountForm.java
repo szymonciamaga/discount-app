@@ -10,13 +10,15 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Set;
 
-@Getter
-@Setter
+
 @JsonFormat
 public class DiscountForm {
 
+    @Getter
+    @Setter
     @NotNull
     @Digits(integer = 6, fraction = 2)
     private BigDecimal discount;
@@ -26,4 +28,8 @@ public class DiscountForm {
     @NotEmpty
     @Size(min = 1, max = 5)
     private Set<ProductForm> products;
+
+    public Set<ProductForm> getProducts() {
+        return Collections.unmodifiableSet(products);
+    }
 }

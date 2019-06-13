@@ -8,6 +8,7 @@ import pl.szymonciamaga.app.model.ProductDiscount;
 import pl.szymonciamaga.app.service.DiscountService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Set;
 
 @Service
@@ -22,7 +23,7 @@ public class DiscountServiceImpl implements DiscountService {
         final BigDecimal overall = getOverall(productForms);
 
         for (ProductForm productForm : productForms) {
-            BigDecimal partialDiscount = productForm.getPrice().divide(overall).multiply(discount);
+            BigDecimal partialDiscount = getPartialDiscount(discount, overall, productForm);
             left = left.subtract(partialDiscount);
             final Product product = createProduct(productForm, partialDiscount);
             productDiscount.addProduct(product);
@@ -35,14 +36,18 @@ public class DiscountServiceImpl implements DiscountService {
         return productDiscount;
     }
 
-    private Product createProduct(ProductForm productForm, BigDecimal partialDiscount) {
+    private BigDecimal getPartialDiscount(BigDecimal discount, BigDecimal overall, ProductForm productForm) {
+        return productForm.getPrice().divide(overall, 2, RoundingMode.HALF_UP).multiply(discount);
+    }
+
+    private Product createProduct(final ProductForm productForm, final BigDecimal partialDiscount) {
         final Product product = new Product();
         product.setName(productForm.getName());
         product.setDiscount(partialDiscount);
         return product;
     }
 
-    private BigDecimal getOverall(Set<ProductForm> productForms) {
+    private BigDecimal getOverall(final Set<ProductForm> productForms) {
         return productForms
                     .stream()
                     .map(ProductForm::getPrice)
