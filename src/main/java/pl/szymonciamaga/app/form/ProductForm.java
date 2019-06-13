@@ -3,6 +3,7 @@ package pl.szymonciamaga.app.form;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class ProductForm {
     private String name;
 
     @NotNull
+    @DecimalMin(value = "0.01")
     @Digits(integer = 6, fraction = 2)
     private BigDecimal price;
 }

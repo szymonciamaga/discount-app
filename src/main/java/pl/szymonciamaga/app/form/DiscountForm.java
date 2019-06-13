@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Set;
@@ -20,6 +17,7 @@ public class DiscountForm {
     @Getter
     @Setter
     @NotNull
+    @DecimalMin(value = "0.01")
     @Digits(integer = 6, fraction = 2)
     private BigDecimal discount;
 
