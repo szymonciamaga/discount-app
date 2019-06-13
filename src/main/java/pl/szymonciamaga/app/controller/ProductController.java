@@ -1,24 +1,26 @@
 package pl.szymonciamaga.app.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.szymonciamaga.app.dto.ProductDiscountDTO;
-import pl.szymonciamaga.app.form.ProductForm;
-import pl.szymonciamaga.app.service.ProductService;
+import pl.szymonciamaga.app.form.DiscountForm;
+import pl.szymonciamaga.app.model.ProductDiscount;
+import pl.szymonciamaga.app.service.DiscountService;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
 
     @Resource
-    private ProductService productService;
+    private DiscountService discountService;
 
-    @PostMapping("/discount")
-    public ProductDiscountDTO calculateProductDiscount(@RequestBody final ProductForm productForm) {
-        return productService.calculateDiscount(productForm);
+    @GetMapping("/discount")
+    public Set<ProductDiscount> getProductsDiscounts(@RequestBody @Validated final DiscountForm discountForm) {
+        return discountService.calculateDiscount(discountForm);
     }
 }
