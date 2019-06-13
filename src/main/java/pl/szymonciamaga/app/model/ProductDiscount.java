@@ -2,20 +2,22 @@ package pl.szymonciamaga.app.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @JsonFormat
 public class ProductDiscount {
 
-    private Set<Product> products = new HashSet<>();
+    private List<Product> products = new ArrayList<>();
 
-    public Set<Product> getProducts() {
-        return Collections.unmodifiableSet(products);
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 
     public void addProduct(Product product) {
         products.add(product);
+    }
+
+    public void removeProduct(int index) {
+        products.remove(index);
     }
 }

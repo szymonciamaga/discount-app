@@ -8,39 +8,38 @@ import pl.szymonciamaga.app.model.ProductDiscount;
 import pl.szymonciamaga.app.service.DiscountService;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class DiscountServiceImpl implements DiscountService {
 
     @Override
-    public Set<ProductDiscount> calculateDiscount(final DiscountForm discountForm) {
+    public ProductDiscount calculateDiscount(final DiscountForm discountForm) {
         final BigDecimal discount = discountForm.getDiscount();
         final Set<ProductForm> productForms = discountForm.getProducts();
-        final BigDecimal percent = calculatePercent(discount, productForms);
-        return productForms
-                .stream()
-                .map(productForm -> {
-                    final ProductDiscount productDiscount = new ProductDiscount();
-                    final Product product = createProduct(percent, productForm, productForm.getPrice());
-                    productDiscount.addProduct(product);
-                    return productDiscount;
-                })
-                .collect(Collectors.toSet());
+        ProductDiscount productDiscount = new ProductDiscount();
+        BigDecimal left = discount;
+        final BigDecimal overall = getOverall(productForms);
+
+        for (ProductForm productForm : productForms) {
+            BigDecimal partialDiscount = productForm.getPrice().divide(overall).multiply(discount);
+            left = left.subtract(partialDiscount);
+            final Product product = createProduct(productForm, partialDiscount);
+            productDiscount.addProduct(product);
+        }
+
+        final Product product = productDiscount.getProducts().get(productDiscount.getProducts().size()-1);
+        product.getDiscount().subtract(left);
+        productDiscount.removeProduct(productDiscount.getProducts().size()-1);
+        productDiscount.addProduct(product);
+        return productDiscount;
     }
 
-    private Product createProduct(BigDecimal percent, ProductForm productForm, BigDecimal price) {
+    private Product createProduct(ProductForm productForm, BigDecimal partialDiscount) {
         final Product product = new Product();
         product.setName(productForm.getName());
-        product.setDiscount(percent.multiply(price));
+        product.setDiscount(partialDiscount);
         return product;
-    }
-
-    private BigDecimal calculatePercent(final BigDecimal discount, final Set<ProductForm> productForms) {
-        final BigDecimal overall = getOverall(productForms);
-        return discount.divide(overall, 2, RoundingMode.HALF_UP);
     }
 
     private BigDecimal getOverall(Set<ProductForm> productForms) {

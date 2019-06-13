@@ -10,7 +10,6 @@ import pl.szymonciamaga.app.model.ProductDiscount;
 import pl.szymonciamaga.app.service.DiscountService;
 
 import javax.annotation.Resource;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/products")
@@ -20,7 +19,7 @@ public class ProductController {
     private DiscountService discountService;
 
     @GetMapping("/discount")
-    public Set<ProductDiscount> getProductsDiscounts(@RequestBody @Validated final DiscountForm discountForm) {
+    public ProductDiscount getProductsDiscounts(@RequestBody @Validated final DiscountForm discountForm) {
         return discountService.calculateDiscount(discountForm);
     }
 }
