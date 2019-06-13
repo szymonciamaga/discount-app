@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     @Resource

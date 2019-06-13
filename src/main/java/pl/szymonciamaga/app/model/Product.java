@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @JsonFormat
-@AllArgsConstructor
-@NoArgsConstructor
 public class Product {
 
     private String name;
