@@ -17,7 +17,7 @@ public class DiscountServiceImpl implements DiscountService {
     public ProductDiscount calculateDiscount(final DiscountForm discountForm) {
         final BigDecimal discount = discountForm.getDiscount();
         final Set<ProductForm> productForms = discountForm.getProducts();
-        ProductDiscount productDiscount = new ProductDiscount();
+        final ProductDiscount productDiscount = new ProductDiscount();
         BigDecimal left = discount;
         final BigDecimal overall = getOverall(productForms);
 
